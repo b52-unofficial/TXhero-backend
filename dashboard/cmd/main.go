@@ -2,20 +2,19 @@ package main
 
 import (
 	"github.com/b52-unofficial/TXhero-backend/config"
-	"github.com/b52-unofficial/TXhero-backend/db"
-	"github.com/b52-unofficial/TXhero-backend/router"
+	"github.com/b52-unofficial/TXhero-backend/dashboard/router"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"log"
 	"sync"
-)
 
-// api router
+	_ "github.com/b52-unofficial/TXhero-backend/docs"
+)
 
 func main() {
 	// DB connection
-	db.ConnectDB()
+	//db.ConnectDB()
 
 	var wg sync.WaitGroup
 	defer wg.Wait()

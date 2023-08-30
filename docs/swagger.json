@@ -1,0 +1,15 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is a swagger for TXHero API",
+        "title": "TXHero API",
+        "contact": {
+            "name": "TXHero API Support",
+            "email": "a41@help.io"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:3002",
+    "basePath": "/api/v1",
+    "paths": {}
+}

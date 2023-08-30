@@ -1,0 +1,11 @@
+basePath: /api/v1
+host: localhost:3002
+info:
+  contact:
+    email: a41@help.io
+    name: TXHero API Support
+  description: This is a swagger for TXHero API
+  title: TXHero API
+  version: "1.0"
+paths: {}
+swagger: "2.0"

@@ -1,6 +1,9 @@
 package router
 
-import "github.com/gofiber/fiber/v2"
+import (
+	swagger "github.com/arsmn/fiber-swagger/v2"
+	"github.com/gofiber/fiber/v2"
+)
 
 func APIRoute(router *fiber.App) {
 	// health check
@@ -11,14 +14,16 @@ func APIRoute(router *fiber.App) {
 		return nil
 	})
 
+	router.Get("/swagger/*", swagger.HandlerDefault)
+
 	TxHandler(router)
-	BuilderHandler(router)
+	SmartContractHandler(router)
 }
 
 func TxHandler(router *fiber.App) {
 	_ = router.Group("tx/v1")
 }
 
-func BuilderHandler(router *fiber.App) {
+func SmartContractHandler(router *fiber.App) {
 	_ = router.Group("builder/v1")
 }
