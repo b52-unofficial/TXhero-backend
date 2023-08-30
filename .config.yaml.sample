@@ -1,0 +1,12 @@
+app:
+  host: 0.0.0.0
+  port: 3003
+database:
+  host: "txhero-dev.cpmnshwsrowv.ap-northeast-2.rds.amazonaws.com"
+  port: "5432"
+  user: "postgres"
+  password: "gkswnaks123"
+  dbname: "postgres"
+secretKey: ""
+rpc:
+  url: "https://goerli.infura.io/v3/0d134e35bb3746ec9ca7cddaaec70447"
