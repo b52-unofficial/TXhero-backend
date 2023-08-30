@@ -14,6 +14,7 @@ type Config struct {
 	App      App
 	DataBase Database
 	Secret   string
+	Eth      Eth
 }
 
 type App struct {
@@ -27,6 +28,10 @@ type Database struct {
 	User     string
 	Password string
 	DBName   string
+}
+
+type Eth struct {
+	Rpc string
 }
 
 func newConfig() {
