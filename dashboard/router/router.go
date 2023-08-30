@@ -2,6 +2,7 @@ package router
 
 import (
 	swagger "github.com/arsmn/fiber-swagger/v2"
+	"github.com/b52-unofficial/TXhero-backend/dashboard/server"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -21,7 +22,9 @@ func APIRoute(router *fiber.App) {
 }
 
 func TxHandler(router *fiber.App) {
-	_ = router.Group("tx/v1")
+	txHandler := router.Group("tx")
+	txHandler.Get("user", server.TransactionInfo)
+	txHandler.Get("metadata", server.TransactionMetadata)
 }
 
 func SmartContractHandler(router *fiber.App) {
