@@ -28,3 +28,19 @@ type TransactionAccumulatedData struct {
 type UserRewardData struct {
 	Reward float64 `db:"reward"`
 }
+
+type RoundInfo struct {
+	Round        int64     `db:"round"`
+	EndTimestamp time.Time `db:"end_timestamp"`
+}
+
+type RoundBuilderInfo struct {
+	Id             int       `db:"id"`
+	BuilderName    string    `db:"builder_name"`
+	BuilderAddr    string    `db:"address"`
+	Description    string    `db:"description"`
+	StartTimestamp time.Time `db:"start_timestamp"`
+	EndTimestamp   time.Time `db:"end_timestamp"`
+	TopBid         float64   `db:"top_bid"`
+	TotalGasFee    float64   `db:"total_gas_fee"`
+}

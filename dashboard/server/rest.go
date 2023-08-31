@@ -3,6 +3,7 @@ package server
 import (
 	"github.com/b52-unofficial/TXhero-backend/dashboard/data"
 	"github.com/gofiber/fiber/v2"
+	"log"
 	"strconv"
 	"time"
 )
@@ -40,16 +41,7 @@ func TransactionInfo(ctx *fiber.Ctx) error {
 		})
 	}
 
-	txInfoData := &TransactionInfoData{
-		ID:        res[0].ID,
-		TxHash:    res[0].TxHash,
-		GasFee:    res[0].GasFee,
-		FromAddr:  res[0].FromAddr,
-		Timestamp: res[0].Timestamp,
-		Status:    res[0].Status,
-		Reward:    res[0].Reward,
-	}
-	return ctx.JSON(txInfoData)
+	return ctx.JSON(res)
 }
 
 func TransactionMetadata(ctx *fiber.Ctx) error {
@@ -74,10 +66,10 @@ func TransactionMetadata(ctx *fiber.Ctx) error {
 	}
 
 	txMetaData := &TransactionMetaData{
-		TotalTx:           res[0].TotalTx,
-		TotalGas:          res[0].TotalGas,
-		TotalRewards:      res[0].TotalRewards,
-		TotalClaimableAmt: reward[0].Reward,
+		TotalTx:           res.TotalTx,
+		TotalGas:          res.TotalGas,
+		TotalRewards:      res.TotalRewards,
+		TotalClaimableAmt: reward.Reward,
 	}
 	return ctx.JSON(txMetaData)
 }
@@ -98,5 +90,37 @@ func TransactionAccumulatedInfo(ctx *fiber.Ctx) error {
 		})
 	}
 
+	return ctx.JSON(res)
+}
+
+func CurrentRound(ctx *fiber.Ctx) error {
+	res, err := data.GetCurrentRound()
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	return ctx.JSON(res)
+}
+
+func PrevRound(ctx *fiber.Ctx) error {
+	round := ctx.Query("round")
+	if round == "" {
+		return ctx.Status(404).JSON(fiber.Map{
+			"err": "round is not nil",
+		})
+	}
+	res, err := data.GetPrevRound(round)
+	if err != nil {
+		return err
+	}
+	return ctx.JSON(res)
+}
+
+func RoundInfo(ctx *fiber.Ctx) error {
+	round := ctx.Query("round")
+	res, err := data.GetRoundInfo(round)
+	if err != nil {
+		return err
+	}
 	return ctx.JSON(res)
 }

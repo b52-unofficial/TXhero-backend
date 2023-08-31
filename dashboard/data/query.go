@@ -28,34 +28,65 @@ func GetTransactionData(userAddr string, date string) ([]*TransactionInfo, error
 	return txInfo, nil
 }
 
-func GetTransactionMetaData(userAddr string) ([]*TransactionMetaData, error) {
+func GetTransactionMetaData(userAddr string) (*TransactionMetaData, error) {
 	database := db.GetDB()
-	var txMetadata []*TransactionMetaData
-	err := database.Select(&txMetadata, QueryUserMetaDataSQL, userAddr)
+	var txMetadata *TransactionMetaData
+	err := database.QueryRow(QueryUserMetaDataSQL, userAddr).Scan(&txMetadata)
 	if err != nil {
 		return nil, err
 	}
 	return txMetadata, nil
 }
 
-func GetTransactionAccumulatedInfo(month time.Time) ([]*TransactionAccumulatedData, error) {
+func GetTransactionAccumulatedInfo(month time.Time) (*TransactionAccumulatedData, error) {
 	database := db.GetDB()
 
-	var txAccumulatedData []*TransactionAccumulatedData
-	err := database.Select(&txAccumulatedData, QueryAccumulatedDataSQL, month)
+	var txAccumulatedData *TransactionAccumulatedData
+	err := database.QueryRow(QueryAccumulatedDataSQL, month).Scan(&txAccumulatedData)
 	if err != nil {
 		return nil, err
 	}
 	return txAccumulatedData, nil
 }
 
-func GetUserRewardData(userAddr string) ([]*UserRewardData, error) {
+func GetUserRewardData(userAddr string) (*UserRewardData, error) {
 	database := db.GetDB()
-	var userReward []*UserRewardData
-	err := database.Select(&userReward, QueryUserRewradSQL, userAddr)
+	var userReward *UserRewardData
+	err := database.QueryRow(QueryUserRewardSQL, userAddr).Scan(&userReward)
+	if err != nil {
+		return nil, err
+	}
+	return userReward, nil
+}
+
+func GetCurrentRound() (*RoundInfo, error) {
+	database := db.GetDB()
+	var roundInfo *RoundInfo
+	err := database.QueryRow(QueryCurrentRoundSQL).Scan(&roundInfo)
+	if err != nil {
+		return nil, err
+	}
+	return roundInfo, nil
+}
+
+func GetPrevRound(round string) (*RoundInfo, error) {
+	database := db.GetDB()
+	var roundInfo *RoundInfo
+	err := database.QueryRow(QueryPrevRoundSQL, round).Scan(&roundInfo)
 	if err != nil {
 		return nil, err
 	}
 
-	return userReward, nil
+	return roundInfo, nil
+}
+
+func GetRoundInfo(round string) ([]*RoundBuilderInfo, error) {
+	database := db.GetDB()
+	var roundBuilder []*RoundBuilderInfo
+	err := database.Select(&roundBuilder, QueryRoundBuilderInfoSQL, round)
+	if err != nil {
+		return nil, err
+	}
+
+	return roundBuilder, nil
 }
