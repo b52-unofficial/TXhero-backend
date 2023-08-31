@@ -6,7 +6,12 @@ database:
   port: "5432"
   user: "postgres"
   password: "gkswnaks123"
-  dbname: "postgres"
+  dbname: "txhero"
 secretKey: ""
-rpc:
-  url: "https://goerli.infura.io/v3/0d134e35bb3746ec9ca7cddaaec70447"
+eth:
+  rpc: "https://goerli.infura.io/v3/0d134e35bb3746ec9ca7cddaaec70447"
+logLevel: "debug"
+job:
+  syncTx: "*/1 * * * *"
+  nextRoundWinningBid: "0 0 * * *"
+  distributeRoundRewards: "0 0 * * *"
