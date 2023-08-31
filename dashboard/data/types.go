@@ -16,5 +16,5 @@ type TransactionInfo struct {
 type TransactionMetaData struct {
 	TotalTx      int64   `json:"totalTx" db:"total_tx"`
 	TotalGas     float64 `json:"totalGas" db:"total_gas"`
-	TotalRewards float64 `json:"totalRewards" db:"total_rewards"`
+	TotalRewards float64 `json:"totalReward" db:"total_reward"`
 }
