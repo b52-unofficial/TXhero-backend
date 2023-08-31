@@ -40,7 +40,16 @@ func TransactionInfo(ctx *fiber.Ctx) error {
 		})
 	}
 
-	return ctx.JSON(res)
+	txInfoData := &TransactionInfoData{
+		ID:        res[0].ID,
+		TxHash:    res[0].TxHash,
+		GasFee:    res[0].GasFee,
+		FromAddr:  res[0].FromAddr,
+		Timestamp: res[0].Timestamp,
+		Status:    res[0].Status,
+		Reward:    res[0].Reward,
+	}
+	return ctx.JSON(txInfoData)
 }
 
 func TransactionMetadata(ctx *fiber.Ctx) error {
@@ -57,7 +66,20 @@ func TransactionMetadata(ctx *fiber.Ctx) error {
 			"err": err,
 		})
 	}
-	return ctx.JSON(res)
+
+	reward, err := data.GetUserRewardData(userAddr)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+
+	txMetaData := &TransactionMetaData{
+		TotalTx:           res[0].TotalTx,
+		TotalGas:          res[0].TotalGas,
+		TotalRewards:      res[0].TotalRewards,
+		TotalClaimableAmt: reward[0].Reward,
+	}
+	return ctx.JSON(txMetaData)
 }
 
 func TransactionAccumulatedInfo(ctx *fiber.Ctx) error {
