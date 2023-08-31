@@ -3,11 +3,18 @@ package server
 import (
 	"github.com/b52-unofficial/TXhero-backend/dashboard/data"
 	"github.com/gofiber/fiber/v2"
-	"log"
 	"strconv"
 	"time"
 )
 
+// HealthCheck godoc
+// @Summary Show the status of server.
+// @Description get the status of server.
+// @Tags root
+// @Accept */*
+// @Produce json
+// @Success 200 {object} map[string]interface{}
+// @Router / [get]
 func HealthCheck(ctx *fiber.Ctx) error {
 	if err := ctx.SendString("OK"); err != nil {
 		return err
@@ -28,7 +35,9 @@ func TransactionInfo(ctx *fiber.Ctx) error {
 	date := ctx.Query("date")
 	res, err := data.GetTransactionData(userAddr, date)
 	if err != nil {
-		log.Println(err)
+		return ctx.Status(500).JSON(fiber.Map{
+			"err": err,
+		})
 	}
 
 	return ctx.JSON(res)
@@ -44,7 +53,9 @@ func TransactionMetadata(ctx *fiber.Ctx) error {
 
 	res, err := data.GetTransactionMetaData(userAddr)
 	if err != nil {
-		log.Println(err)
+		return ctx.Status(500).JSON(fiber.Map{
+			"err": err,
+		})
 	}
 	return ctx.JSON(res)
 }
@@ -60,7 +71,9 @@ func TransactionAccumulatedInfo(ctx *fiber.Ctx) error {
 
 	res, err := data.GetTransactionAccumulatedInfo(month)
 	if err != nil {
-		log.Println(err)
+		return ctx.Status(500).JSON(fiber.Map{
+			"err": err,
+		})
 	}
 
 	return ctx.JSON(res)
