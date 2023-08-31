@@ -52,7 +52,7 @@ func GetTransactionAccumulatedInfo(month time.Time) ([]*TransactionAccumulatedDa
 func GetUserRewardData(userAddr string) ([]*UserRewardData, error) {
 	database := db.GetDB()
 	var userReward []*UserRewardData
-	err := database.Select(&userReward, QueryUserRewradSQL, userAddr)
+	err := database.Select(&userReward, QueryUserRewardSQL, userAddr)
 	if err != nil {
 		return nil, err
 	}
