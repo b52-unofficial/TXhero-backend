@@ -23,3 +23,14 @@ type TransactionAccumulatedData struct {
 	TotalRewardAmt float64 `json:"totalRewardAmt"`
 	AvgRewardAmt   float64 `json:"avgRewardAmt"`
 }
+
+type RoundBuilderInfo struct {
+	Id             int       `json:"id"`
+	BuilderName    string    `json:"builderName"`
+	BuilderAddr    string    `json:"builderAddr"`
+	Description    string    `json:"description"`
+	StartTimestamp time.Time `json:"startTimestamp"`
+	EndTimestamp   time.Time `json:"endTimestamp"`
+	TopBid         float64   `json:"topBid"`
+	TotalGasFee    float64   `json:"totalGasFee"`
+}
