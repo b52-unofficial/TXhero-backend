@@ -14,7 +14,9 @@ type Config struct {
 	App      App
 	DataBase Database
 	Secret   string
+	LogLevel string
 	Eth      Eth
+	Job      Job
 }
 
 type App struct {
@@ -32,6 +34,11 @@ type Database struct {
 
 type Eth struct {
 	Rpc string
+}
+
+type Job struct {
+	SyncTx              string
+	NextRoundWinningBid string
 }
 
 func newConfig() {
