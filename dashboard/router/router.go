@@ -7,15 +7,8 @@ import (
 )
 
 func APIRoute(router *fiber.App) {
-	// health check
-	router.Get("/health", func(ctx *fiber.Ctx) error {
-		if err := ctx.SendString("OK"); err != nil {
-			return err
-		}
-		return nil
-	})
-
 	router.Get("/swagger/*", swagger.HandlerDefault)
+	router.Get("/health", server.HealthCheck)
 
 	TxHandler(router)
 	SmartContractHandler(router)
@@ -25,6 +18,7 @@ func TxHandler(router *fiber.App) {
 	txHandler := router.Group("tx")
 	txHandler.Get("user", server.TransactionInfo)
 	txHandler.Get("metadata", server.TransactionMetadata)
+	txHandler.Get("accumulated_info", server.TransactionAccumulatedInfo)
 }
 
 func SmartContractHandler(router *fiber.App) {

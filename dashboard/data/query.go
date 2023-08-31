@@ -31,9 +31,20 @@ func GetTransactionData(userAddr string, date string) ([]*TransactionInfo, error
 func GetTransactionMetaData(userAddr string) ([]*TransactionMetaData, error) {
 	database := db.GetDB()
 	var txMetadata []*TransactionMetaData
-	err := database.Select(&txMetadata, QueryUserMetaData, userAddr)
+	err := database.Select(&txMetadata, QueryUserMetaDataSQL, userAddr)
 	if err != nil {
 		return nil, err
 	}
 	return txMetadata, nil
+}
+
+func GetTransactionAccumulatedInfo(month time.Time) ([]*TransactionAccumulatedData, error) {
+	database := db.GetDB()
+
+	var txAccumulatedData []*TransactionAccumulatedData
+	err := database.Select(&txAccumulatedData, QueryAccumulatedDataSQL, month)
+	if err != nil {
+		return nil, err
+	}
+	return txAccumulatedData, nil
 }
