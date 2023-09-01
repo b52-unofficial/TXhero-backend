@@ -5,7 +5,6 @@ import (
 	"github.com/b52-unofficial/TXhero-backend/stateManager/common/constant"
 	"github.com/b52-unofficial/TXhero-backend/stateManager/common/logger"
 	"github.com/b52-unofficial/TXhero-backend/stateManager/data"
-	"github.com/b52-unofficial/TXhero-backend/stateManager/service/aclManager"
 	"github.com/b52-unofficial/TXhero-backend/stateManager/service/eth"
 	"github.com/go-co-op/gocron"
 	"math/rand"
@@ -56,7 +55,7 @@ func setNextRoundWinningBid() {
 	data.InsertNextBidInfo(topBidInfo)
 
 	//ACL Manager 트리거 - TODO
-	aclManager.TriggerAclManager(topBidInfo)
+	// aclManager.TriggerAclManager(topBidInfo)
 }
 
 // 이번 라운드 보상 정산하는 Job
