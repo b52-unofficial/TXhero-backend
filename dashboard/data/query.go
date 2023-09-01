@@ -28,65 +28,51 @@ func GetTransactionData(userAddr string, date string) ([]*TransactionInfo, error
 	return txInfo, nil
 }
 
-func GetTransactionMetaData(userAddr string) (*TransactionMetaData, error) {
+func GetTransactionMetaData(userAddr string) ([]*TransactionMetaData, error) {
 	database := db.GetDB()
-	var txMetadata *TransactionMetaData
-	err := database.QueryRow(QueryUserMetaDataSQL, userAddr).Scan(&txMetadata)
-	if err != nil {
-		return nil, err
-	}
-	return txMetadata, nil
+	var txMetadata []*TransactionMetaData
+	err := database.Select(&txMetadata, QueryUserMetaDataSQL, userAddr)
+
+	return txMetadata, err
 }
 
 func GetTransactionAccumulatedInfo(month time.Time) (*TransactionAccumulatedData, error) {
 	database := db.GetDB()
 
-	var txAccumulatedData *TransactionAccumulatedData
-	err := database.QueryRow(QueryAccumulatedDataSQL, month).Scan(&txAccumulatedData)
-	if err != nil {
-		return nil, err
-	}
-	return txAccumulatedData, nil
+	var txAccumulatedData TransactionAccumulatedData
+	err := database.QueryRow(QueryAccumulatedDataSQL, month).Scan(&txAccumulatedData.AvgRewardAmt, &txAccumulatedData.TotalRewardAmt)
+
+	return &txAccumulatedData, err
 }
 
-func GetUserRewardData(userAddr string) (*UserRewardData, error) {
+func GetUserRewardData(userAddr string) (UserRewardData, error) {
 	database := db.GetDB()
-	var userReward *UserRewardData
-	err := database.QueryRow(QueryUserRewardSQL, userAddr).Scan(&userReward)
-	if err != nil {
-		return nil, err
-	}
-	return userReward, nil
+	var userReward UserRewardData
+	err := database.QueryRow(QueryUserRewardSQL, userAddr).Scan(&userReward.Reward)
+
+	return userReward, err
 }
 
-func GetCurrentRound() (*RoundInfo, error) {
+func GetCurrentRound() (RoundInfo, error) {
 	database := db.GetDB()
-	var roundInfo *RoundInfo
-	err := database.QueryRow(QueryCurrentRoundSQL).Scan(&roundInfo)
-	if err != nil {
-		return nil, err
-	}
-	return roundInfo, nil
+	var roundInfo RoundInfo
+	err := database.QueryRow(QueryCurrentRoundSQL).Scan(&roundInfo.Round, &roundInfo.EndTimestamp)
+
+	return roundInfo, err
 }
 
-func GetPrevRound(round string) (*RoundInfo, error) {
+func GetPrevRound(round string) (RoundInfo, error) {
 	database := db.GetDB()
-	var roundInfo *RoundInfo
-	err := database.QueryRow(QueryPrevRoundSQL, round).Scan(&roundInfo)
-	if err != nil {
-		return nil, err
-	}
+	var roundInfo RoundInfo
+	err := database.QueryRow(QueryPrevRoundSQL, round).Scan(&roundInfo.Round, &roundInfo.EndTimestamp)
 
-	return roundInfo, nil
+	return roundInfo, err
 }
 
 func GetRoundInfo(round string) ([]*RoundBuilderInfo, error) {
 	database := db.GetDB()
 	var roundBuilder []*RoundBuilderInfo
 	err := database.Select(&roundBuilder, QueryRoundBuilderInfoSQL, round)
-	if err != nil {
-		return nil, err
-	}
 
-	return roundBuilder, nil
+	return roundBuilder, err
 }

@@ -36,9 +36,7 @@ func TransactionInfo(ctx *fiber.Ctx) error {
 	date := ctx.Query("date")
 	res, err := data.GetTransactionData(userAddr, date)
 	if err != nil {
-		return ctx.Status(500).JSON(fiber.Map{
-			"err": err,
-		})
+		return err
 	}
 
 	return ctx.JSON(res)
@@ -54,9 +52,7 @@ func TransactionMetadata(ctx *fiber.Ctx) error {
 
 	res, err := data.GetTransactionMetaData(userAddr)
 	if err != nil {
-		return ctx.Status(500).JSON(fiber.Map{
-			"err": err,
-		})
+		return err
 	}
 
 	reward, err := data.GetUserRewardData(userAddr)
@@ -66,28 +62,22 @@ func TransactionMetadata(ctx *fiber.Ctx) error {
 	}
 
 	txMetaData := &TransactionMetaData{
-		TotalTx:           res.TotalTx,
-		TotalGas:          res.TotalGas,
-		TotalRewards:      res.TotalRewards,
+		TotalTx:           res[0].TotalTx,
+		TotalGas:          res[0].TotalGas,
+		TotalRewards:      res[0].TotalRewards,
 		TotalClaimableAmt: reward.Reward,
 	}
 	return ctx.JSON(txMetaData)
 }
 
 func TransactionAccumulatedInfo(ctx *fiber.Ctx) error {
-	avgMonth := ctx.Query("avg_month")
-	if avgMonth == "" {
-		avgMonth = "3"
-	}
-
+	avgMonth := ctx.Query("avg_month", "3")
 	tmp, err := strconv.ParseInt(avgMonth, 10, 64)
 	month := time.Now().AddDate(0, int(-tmp), 0)
 
 	res, err := data.GetTransactionAccumulatedInfo(month)
 	if err != nil {
-		return ctx.Status(500).JSON(fiber.Map{
-			"err": err,
-		})
+		return err
 	}
 
 	return ctx.JSON(res)
@@ -96,7 +86,6 @@ func TransactionAccumulatedInfo(ctx *fiber.Ctx) error {
 func CurrentRound(ctx *fiber.Ctx) error {
 	res, err := data.GetCurrentRound()
 	if err != nil {
-		log.Println(err)
 		return err
 	}
 	return ctx.JSON(res)
