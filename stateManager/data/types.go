@@ -31,3 +31,8 @@ type BidInfo struct {
 	CreateDt       time.Time `json:"createDt" db:"create_dt"`
 	UpdateDt       time.Time `json:"updateDt" db:"update_dt"`
 }
+
+type RewardInfo struct {
+	Address string  `json:"address" db:"address"`
+	Reward  float64 `json:"reward" db:"reward"`
+}
