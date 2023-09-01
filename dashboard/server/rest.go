@@ -116,13 +116,13 @@ func RoundInfo(ctx *fiber.Ctx) error {
 }
 
 func UserReward(ctx *fiber.Ctx) error {
-	var rewards UserRewardData
+	var rewards []*data.UserRewardData
 	err := ctx.BodyParser(&rewards)
 	if err != nil {
 		return err
 	}
 
-	err = data.SaveUserReward(rewards.Data)
+	err = data.SaveUserReward(rewards)
 	return err
 }
 

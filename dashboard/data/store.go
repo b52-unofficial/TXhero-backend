@@ -4,7 +4,7 @@ import (
 	"github.com/b52-unofficial/TXhero-backend/common/db"
 )
 
-func SaveUserReward(userData []UserRewardData) error {
+func SaveUserReward(userData []*UserRewardData) error {
 	database := db.GetDB()
 
 	tx := database.MustBegin()
