@@ -1,6 +1,7 @@
 package server
 
 import (
+	"fmt"
 	"github.com/b52-unofficial/TXhero-backend/dashboard/data"
 	"github.com/gofiber/fiber/v2"
 	"log"
@@ -112,4 +113,33 @@ func RoundInfo(ctx *fiber.Ctx) error {
 		return err
 	}
 	return ctx.JSON(res)
+}
+
+func UserReward(ctx *fiber.Ctx) error {
+	var rewards UserRewardData
+	err := ctx.BodyParser(&rewards)
+	if err != nil {
+		return err
+	}
+
+	err = data.SaveUserReward(rewards.Data)
+	return err
+}
+
+func UserRewardClaim(ctx *fiber.Ctx) error {
+	var userAddr UserRewardClaimData
+
+	err := ctx.BodyParser(&userAddr)
+	if err != nil {
+		return err
+	}
+
+	if userAddr.Address == "" {
+		return ctx.Status(404).JSON(fiber.Map{
+			"err": fmt.Sprintf("user address is nil"),
+		})
+	}
+
+	err = data.UpdateUserReward(userAddr.Address)
+	return err
 }

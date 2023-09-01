@@ -14,4 +14,6 @@ const (
 
 	// TODO: Change Contract Query
 	QueryUserRewardSQL = "SELECT coalesce(sum(reward), 0) as reward FROM reward WHERE address = $1"
+	SaveUserRewardSQL  = "INSERT INTO reward (address, reward) VALUES (:address, :reward) ON conflict (address) DO UPDATE SET (address, reward) = (excluded.address, excluded.reward + reward.reward)"
+	UserRewardClaimSQL = "UPDATE reward SET reward = 0 WHERE address = $1"
 )

@@ -26,7 +26,8 @@ type TransactionAccumulatedData struct {
 }
 
 type UserRewardData struct {
-	Reward float64 `db:"reward"`
+	Address string  `db:"address"`
+	Reward  float64 `db:"reward"`
 }
 
 type RoundInfo struct {

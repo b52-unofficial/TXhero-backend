@@ -11,7 +11,7 @@ func APIRoute(router *fiber.App) {
 	router.Get("/health", server.HealthCheck)
 
 	TxHandler(router)
-	BuilderHandler(router)
+	RewardHandler(router)
 	BidHandler(router)
 }
 
@@ -22,9 +22,10 @@ func TxHandler(router *fiber.App) {
 	txHandler.Get("accumulated_info", server.TransactionAccumulatedInfo)
 }
 
-func BuilderHandler(router *fiber.App) {
-	_ = router.Group("builder")
-	//builderHandler.Get("")
+func RewardHandler(router *fiber.App) {
+	rewardHandler := router.Group("reward")
+	rewardHandler.Post("", server.UserReward)
+	rewardHandler.Put("claim", server.UserRewardClaim)
 }
 
 func BidHandler(router *fiber.App) {
