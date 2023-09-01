@@ -11,12 +11,13 @@ var (
 )
 
 type Config struct {
-	App      App
-	DataBase Database
-	Secret   string
-	LogLevel string
-	Eth      Eth
-	Job      Job
+	App       App
+	DataBase  Database
+	Secret    string
+	LogLevel  string
+	Eth       Eth
+	Job       Job
+	Endpoints Endpoints
 }
 
 type App struct {
@@ -32,13 +33,20 @@ type Database struct {
 	DBName   string
 }
 
+type Endpoints struct {
+	Dashboard  string
+	contract   string
+	aclManager string
+}
+
 type Eth struct {
 	Rpc string
 }
 
 type Job struct {
-	SyncTx              string
-	NextRoundWinningBid string
+	SyncTx                 string
+	NextRoundWinningBid    string
+	DistributeRoundRewards string
 }
 
 func newConfig() {
