@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: txhero-dashboard
+  namespace: tx-hero
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: txhero-dashboard
+  template:
+    metadata:
+      labels:
+        app: txhero-dashboard
+    spec:
+      containers:
+        - name: txhero-dashboard
+          image: a41ventures/txhero:txhero-dashboard-v0.1
+          ports:
+            - containerPort: 3002
+          imagePullPolicy: Always
+      nodeSelector:
+        alpha.eksctl.io/nodegroup-name: tx-hero-ng

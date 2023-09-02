@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/b52-unofficial/TXhero-backend/config"
-	"github.com/b52-unofficial/TXhero-backend/stateManager/common/logger"
+	"github.com/b52-unofficial/TXhero-backend/dashboard/stateManager/common/logger"
 	"math/big"
 
 	"github.com/ethereum/go-ethereum/common"
