@@ -1,7 +1,6 @@
 package server
 
 import (
-	"github.com/b52-unofficial/TXhero-backend/dashboard/data"
 	"time"
 )
 
@@ -36,10 +35,6 @@ type RoundBuilderInfo struct {
 	EndTimestamp   time.Time `json:"endTimestamp"`
 	TopBid         float64   `json:"topBid"`
 	TotalGasFee    float64   `json:"totalGasFee"`
-}
-
-type UserRewardData struct {
-	Data []data.UserRewardData `json:"userRewardInfo"`
 }
 
 type UserRewardClaimData struct {

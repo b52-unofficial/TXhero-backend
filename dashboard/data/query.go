@@ -45,6 +45,14 @@ func GetTransactionAccumulatedInfo(month time.Time) (*TransactionAccumulatedData
 	return &txAccumulatedData, err
 }
 
+func GetTransactionChartInfo(address string, period time.Time) ([]*TxChartData, error) {
+	database := db.GetDB()
+	var txChartInfo []*TxChartData
+	err := database.Select(&txChartInfo, QueryChartInfoSQL, address, period)
+
+	return txChartInfo, err
+}
+
 func GetUserRewardData(userAddr string) (UserRewardData, error) {
 	database := db.GetDB()
 	var userReward UserRewardData

@@ -6,6 +6,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"log"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -84,6 +85,37 @@ func TransactionAccumulatedInfo(ctx *fiber.Ctx) error {
 	return ctx.JSON(res)
 }
 
+func TransactionChartInfo(ctx *fiber.Ctx) error {
+	userAddr := ctx.Query("address")
+	period := ctx.Query("period")
+
+	tmp := strings.Split(period, "-")
+	if len(tmp) < 2 {
+		return fmt.Errorf("")
+	}
+
+	num, err := strconv.ParseInt(tmp[0], 10, 64)
+	var date time.Time
+	switch tmp[1] {
+	case "year":
+		date = time.Now().AddDate(-int(num), 0, 0)
+	case "month":
+		date = time.Now().AddDate(0, -int(num), 0)
+	case "day":
+		date = time.Now().AddDate(0, 0, -int(num))
+	case "week":
+		date = time.Now().AddDate(0, 0, -int(num)*7)
+	default:
+		return fmt.Errorf("%s is not exist", tmp[1])
+	}
+
+	res, err := data.GetTransactionChartInfo(userAddr, date)
+	if err != nil {
+		return err
+	}
+	return ctx.JSON(res)
+}
+
 func CurrentRound(ctx *fiber.Ctx) error {
 	res, err := data.GetCurrentRound()
 	if err != nil {
@@ -121,7 +153,6 @@ func UserReward(ctx *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-
 	err = data.SaveUserReward(rewards)
 	return err
 }

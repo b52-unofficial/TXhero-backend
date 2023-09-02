@@ -20,6 +20,7 @@ func TxHandler(router *fiber.App) {
 	txHandler.Get("user", server.TransactionInfo)
 	txHandler.Get("metadata", server.TransactionMetadata)
 	txHandler.Get("accumulated_info", server.TransactionAccumulatedInfo)
+	txHandler.Get("chart_info", server.TransactionChartInfo)
 }
 
 func RewardHandler(router *fiber.App) {
