@@ -1,7 +1,6 @@
 package worker
 
 import (
-	"github.com/b52-unofficial/TXhero-backend/config"
 	"github.com/b52-unofficial/TXhero-backend/stateManager/common/constant"
 	"github.com/b52-unofficial/TXhero-backend/stateManager/common/logger"
 	"github.com/b52-unofficial/TXhero-backend/stateManager/data"
@@ -105,6 +104,7 @@ func distributeRoundRewards() {
 
 	//rewardData를 Smart Contract API에 호출
 	if len(rewardTargets) > 0 {
+		logger.Log.Debug("Call Smart Contract API")
 		contractApi.RequestUpdateRewardData(rewardData)
 	}
 
@@ -117,9 +117,9 @@ func forTest() {
 }
 
 func RegisterCron() {
-	conf := config.GetConfig()
+	//conf := config.GetConfig()
 	//TEST
-	//distributeRoundRewards()
+	distributeRoundRewards()
 	if contractApi.ApiServerHealthCheck() {
 		logger.Log.Debug("Api Server Health Check Success")
 	} else {
@@ -131,9 +131,9 @@ func RegisterCron() {
 	scheduler := gocron.NewScheduler(time.UTC)
 
 	//syncTxConfirmed job 등록
-	scheduler.Cron(conf.Job.SyncTx).Do(syncTxConfirmed)
-	scheduler.Cron(conf.Job.NextRoundWinningBid).Do(setNextRoundWinningBid)
-	scheduler.Cron(conf.Job.DistributeRoundRewards).Do(distributeRoundRewards)
+	//scheduler.Cron(conf.Job.SyncTx).Do(syncTxConfirmed)
+	//scheduler.Cron(conf.Job.NextRoundWinningBid).Do(setNextRoundWinningBid)
+	//scheduler.Cron(conf.Job.DistributeRoundRewards).Do(distributeRoundRewards)
 
 	scheduler.StartBlocking()
 

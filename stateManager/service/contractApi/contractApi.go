@@ -10,19 +10,11 @@ import (
 	"net/http"
 )
 
-type ReqData struct {
-	UserRewardInfo []*data.RewardInfo `json:"userRewardInfo"`
-}
-
 func RequestUpdateRewardData(rewardData []*data.RewardInfo) error {
 	logger.Log.Debugf("RequestUpdateRewardData: %v", len(rewardData))
 	conf := config.GetConfig()
 
-	data := ReqData{
-		UserRewardInfo: rewardData,
-	}
-
-	payloadBytes, err := json.Marshal(data)
+	payloadBytes, err := json.Marshal(rewardData)
 	if err != nil {
 		logger.Log.Errorf("Failed to marshal rewardData: %v", err)
 		return err
