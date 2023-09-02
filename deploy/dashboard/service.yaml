@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: txhero-dashboard-service
+  namespace: tx-hero
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: nlb
+spec:
+  selector:
+    app: txhero-dashboard
+  ports:
+    - protocol: TCP
+      port: 3002
+      targetPort: 3002
+      nodePort: 30013
+  type: LoadBalancer

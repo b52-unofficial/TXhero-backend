@@ -34,9 +34,9 @@ type Database struct {
 }
 
 type Endpoints struct {
-	Dashboard  string
-	Contract   string
-	AclManager string
+	Dashboard   string
+	ContractApi string
+	AclManager  string
 }
 
 type Eth struct {

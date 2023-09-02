@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: txhero-front
+  namespace: tx-hero
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: txhero-front
+  template:
+    metadata:
+      labels:
+        app: txhero-front
+    spec:
+      containers:
+        - name: txhero-front
+          image: a41ventures/txhero:txhero-front-v0.1
+          ports:
+            - containerPort: 3000
+          imagePullPolicy: Always
+      nodeSelector:
+        alpha.eksctl.io/nodegroup-name: tx-hero-ng
