@@ -40,7 +40,7 @@ type RoundInfo struct {
 	Round          int64     `db:"round" json:"round"`
 	StartTimestamp time.Time `db:"start_timestamp" json:"startTimestamp"`
 	EndTimestamp   time.Time `db:"end_timestamp" json:"endTimestamp"`
-	TotalTxCount   int64     `db:"total_tx_cnt" json:"totalTxCount"`
+	TotalTxCount   int64     `db:"total_tx_cnt" json:"totalTxCnt"`
 }
 
 type RoundBuilderInfo struct {
