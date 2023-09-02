@@ -37,8 +37,10 @@ type UserRewardData struct {
 }
 
 type RoundInfo struct {
-	Round        int64     `db:"round" json:"round"`
-	EndTimestamp time.Time `db:"end_timestamp" json:"endTimestamp"`
+	Round          int64     `db:"round" json:"round"`
+	StartTimestamp time.Time `db:"start_timestamp" json:"startTimestamp"`
+	EndTimestamp   time.Time `db:"end_timestamp" json:"endTimestamp"`
+	TotalTxCount   int64     `db:"total_tx_cnt" json:"totalTxCount"`
 }
 
 type RoundBuilderInfo struct {

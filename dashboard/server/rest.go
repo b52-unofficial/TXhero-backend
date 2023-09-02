@@ -135,6 +135,11 @@ func PrevRound(ctx *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
+	if res.Round == 0 {
+		return ctx.Status(404).JSON(fiber.Map{
+			"err": "round is not found",
+		})
+	}
 	return ctx.JSON(res)
 }
 

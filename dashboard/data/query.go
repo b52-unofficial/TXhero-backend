@@ -72,8 +72,11 @@ func GetCurrentRound() (RoundInfo, error) {
 func GetPrevRound(round string) (RoundInfo, error) {
 	database := db.GetDB()
 	var roundInfo RoundInfo
-	err := database.QueryRow(QueryPrevRoundSQL, round).Scan(&roundInfo.Round, &roundInfo.EndTimestamp)
+	// RoundInfo에서 round, start, end timestamp
+	err := database.QueryRow(QueryPrevRoundSQL, round).Scan(&roundInfo.Round, &roundInfo.StartTimestamp, &roundInfo.EndTimestamp)
 
+	err = database.QueryRow(QueryRoundTxSQL, roundInfo.StartTimestamp, roundInfo.EndTimestamp).Scan(&roundInfo.TotalTxCount)
+	
 	return roundInfo, err
 }
 
