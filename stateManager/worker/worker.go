@@ -120,6 +120,11 @@ func RegisterCron() {
 	conf := config.GetConfig()
 	//TEST
 	//distributeRoundRewards()
+	if contractApi.ApiServerHealthCheck() {
+		logger.Log.Debug("Api Server Health Check Success")
+	} else {
+		logger.Log.Debug("Api Server Health Check Fail")
+	}
 
 	logger.Log.Debug("start cron job register")
 
@@ -129,8 +134,6 @@ func RegisterCron() {
 	scheduler.Cron(conf.Job.SyncTx).Do(syncTxConfirmed)
 	scheduler.Cron(conf.Job.NextRoundWinningBid).Do(setNextRoundWinningBid)
 	scheduler.Cron(conf.Job.DistributeRoundRewards).Do(distributeRoundRewards)
-
-	//scheduler.Every(5).Seconds().Do(anotherTask)
 
 	scheduler.StartBlocking()
 
