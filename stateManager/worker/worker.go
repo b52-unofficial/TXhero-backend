@@ -2,11 +2,11 @@ package worker
 
 import (
 	"github.com/b52-unofficial/TXhero-backend/config"
-	"github.com/b52-unofficial/TXhero-backend/dashboard/stateManager/common/constant"
-	"github.com/b52-unofficial/TXhero-backend/dashboard/stateManager/common/logger"
-	data2 "github.com/b52-unofficial/TXhero-backend/dashboard/stateManager/data"
-	"github.com/b52-unofficial/TXhero-backend/dashboard/stateManager/service/contractApi"
-	"github.com/b52-unofficial/TXhero-backend/dashboard/stateManager/service/eth"
+	"github.com/b52-unofficial/TXhero-backend/stateManager/common/constant"
+	"github.com/b52-unofficial/TXhero-backend/stateManager/common/logger"
+	"github.com/b52-unofficial/TXhero-backend/stateManager/data"
+	"github.com/b52-unofficial/TXhero-backend/stateManager/service/contractApi"
+	"github.com/b52-unofficial/TXhero-backend/stateManager/service/eth"
 	"github.com/go-co-op/gocron"
 	"math/rand"
 	"time"
@@ -17,7 +17,7 @@ func syncTxConfirmed() {
 	logger.Log.Debug("syncTxConfirmed Job Start")
 
 	//DB에서 unconfirmed인 tx들을 가져와서 확인
-	unconfirmedTxs, err := data2.GetTransactionDataByStatus(constant.TX_STATUS_UNCONFIRMED)
+	unconfirmedTxs, err := data.GetTransactionDataByStatus(constant.TX_STATUS_UNCONFIRMED)
 	if err != nil {
 		logger.Log.Error(err)
 		return
@@ -35,7 +35,7 @@ func syncTxConfirmed() {
 		isConfirmed, gasFee := eth.CheckTxConfirmed(tx.TxHash)
 		if isConfirmed {
 			//confirm되었다면 DB에 update
-			data2.UpdateTxConfirmed(tx.TxHash, gasFee)
+			data.UpdateTxConfirmed(tx.TxHash, gasFee)
 		}
 	}
 }
@@ -50,10 +50,10 @@ func setNextRoundWinningBid() {
 	//가져온 정보로 쿵짝쿵짝해서 계산 (Mocking)
 	//대충 0.05~1 사이의 랜덤한 숫자를 뽑아서 topBid으로 설정
 	rand.Seed(time.Now().UnixNano())
-	topBidInfo := &data2.BidInfo{TopBid: 0.05 + rand.Float64()*(1-0.05), BuilderId: 1}
+	topBidInfo := &data.BidInfo{TopBid: 0.05 + rand.Float64()*(1-0.05), BuilderId: 1}
 
 	//다음 라운드의 winning bid 정보를 DB에 Insert 일단 Happy case만 가정
-	data2.InsertNextBidInfo(topBidInfo)
+	data.InsertNextBidInfo(topBidInfo)
 
 	//ACL Manager 트리거 - TODO
 	// aclManager.TriggerAclManager(topBidInfo)
@@ -62,13 +62,13 @@ func setNextRoundWinningBid() {
 // 이번 라운드 보상 정산하는 Job
 func distributeRoundRewards() {
 	//이전라운드 bid 조회
-	prevBidInfo, err := data2.GetPrevRoundBidInfo()
+	prevBidInfo, err := data.GetPrevRoundBidInfo()
 	if err != nil {
 		logger.Log.Error(err)
 		return
 	}
 
-	prevRoundTotalGasUsed, err := data2.GetPrevRoundTotalGasFee(prevBidInfo.StartTimestamp, prevBidInfo.EndTimestamp)
+	prevRoundTotalGasUsed, err := data.GetPrevRoundTotalGasFee(prevBidInfo.StartTimestamp, prevBidInfo.EndTimestamp)
 	if err != nil {
 		logger.Log.Error(err)
 		return
@@ -78,16 +78,16 @@ func distributeRoundRewards() {
 	rewardPool := prevBidInfo.TopBid
 	logger.Log.Debug("rewardPool: ", rewardPool)
 
-	rewardTargets, err := data2.GetPrevRoundConfirmedTxGasFeeGroupByAddress(prevBidInfo.StartTimestamp, prevBidInfo.EndTimestamp)
-	var rewardData []*data2.RewardInfo
+	rewardTargets, err := data.GetPrevRoundConfirmedTxGasFeeGroupByAddress(prevBidInfo.StartTimestamp, prevBidInfo.EndTimestamp)
+	var rewardData []*data.RewardInfo
 	//rewardTargets 돌면서 rewardData에 append
 	for _, target := range rewardTargets {
-		rewardData = append(rewardData, &data2.RewardInfo{target.FromAddr, (target.GasFee / prevRoundTotalGasUsed) * rewardPool})
+		rewardData = append(rewardData, &data.RewardInfo{target.FromAddr, (target.GasFee / prevRoundTotalGasUsed) * rewardPool})
 		//	logger.Log.Debug("rewardTarget: ", (target.GasFee/prevRoundTotalGasUsed)*rewardPool, " address: ", target.FromAddr)
 	}
 
 	//지난 라운드 모든 confirmed tx를 다 가져옴 (추후 위 로직과 한방에 하게끔 수정해야함)
-	prevRoundConfirmedTxs, err := data2.GetPrevRoundConfirmedTxs(prevBidInfo.StartTimestamp, prevBidInfo.EndTimestamp)
+	prevRoundConfirmedTxs, err := data.GetPrevRoundConfirmedTxs(prevBidInfo.StartTimestamp, prevBidInfo.EndTimestamp)
 	if err != nil {
 		logger.Log.Error(err)
 		return
@@ -95,7 +95,7 @@ func distributeRoundRewards() {
 
 	//for 돌면서 reward 정보 update
 	for _, tx := range prevRoundConfirmedTxs {
-		data2.UpdateTxReward(tx.TxHash, (tx.GasFee/prevRoundTotalGasUsed)*rewardPool)
+		data.UpdateTxReward(tx.TxHash, (tx.GasFee/prevRoundTotalGasUsed)*rewardPool)
 	}
 
 	//rewardData for 돌면서 프린트 - 로깅용 TODO 삭제

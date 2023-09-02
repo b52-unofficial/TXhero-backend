@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/b52-unofficial/TXhero-backend/config"
-	"github.com/b52-unofficial/TXhero-backend/dashboard/stateManager/common/logger"
-	"github.com/b52-unofficial/TXhero-backend/dashboard/stateManager/data"
+	"github.com/b52-unofficial/TXhero-backend/stateManager/common/logger"
+	"github.com/b52-unofficial/TXhero-backend/stateManager/data"
 	"net/http"
 )
 

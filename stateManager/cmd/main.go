@@ -2,8 +2,8 @@ package main
 
 import (
 	"github.com/b52-unofficial/TXhero-backend/config"
-	"github.com/b52-unofficial/TXhero-backend/dashboard/stateManager/common/logger"
-	"github.com/b52-unofficial/TXhero-backend/dashboard/stateManager/worker"
+	"github.com/b52-unofficial/TXhero-backend/stateManager/common/logger"
+	"github.com/b52-unofficial/TXhero-backend/stateManager/worker"
 	"sync"
 
 	_ "github.com/b52-unofficial/TXhero-backend/docs"

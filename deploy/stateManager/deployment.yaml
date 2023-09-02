@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: txhero-state-manager
+  namespace: tx-hero
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: txhero-state-manager
+  template:
+    metadata:
+      labels:
+        app: txhero-state-manager
+    spec:
+      containers:
+        - name: txhero-state-manager
+          image: a41ventures/txhero:txhero-stateManager-v0.1
+          imagePullPolicy: Always
+      nodeSelector:
+        alpha.eksctl.io/nodegroup-name: tx-hero-ng
